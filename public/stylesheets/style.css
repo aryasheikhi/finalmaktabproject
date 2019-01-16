@@ -1,0 +1,50 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	/* padding: 0 !important; */
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	background-color: #EBEBEB;
+}
+
+.welcomebackground {
+	/* width: 100%; */
+	position: relative;
+}
+.fill {
+	overflow: hidden;
+	height: 400px;
+	padding: 0 !important;
+}
+.fill img {
+	align-content: center;
+	flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%
+}
+a {
+	color: #00B7FF;
+}
+.welcometext {
+	color: white;
+	position: absolute !important;
+	top: 50px;
+	justify-content: center;
+	left: 0;
+}
+
+
+/* for mobile */
+.topheading {
+	height: 500px;
+}
+.topheading-background {
+	background-image: url('/images/background-welcome.jpg');
+	background-repeat: no-repeat;
+}
+.makertl {
+	text-align: right;
+}
+.pd-right-20 {
+	margin-right: 20px !important;
+}
