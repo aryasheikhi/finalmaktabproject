@@ -1,50 +1,80 @@
+@font-face {
+    font-family: 'Parastoo';
+    src: url('../fonts/Parastoo.eot');
+    src: url('../fonts/Parastoo.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Parastoo.woff') format('woff'),
+        url('../fonts/Parastoo.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Parastoo-bold';
+    src: url('../fonts/Parastoo-Bold.eot');
+    src: url('../fonts/Parastoo-Bold.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Parastoo-Bold.woff') format('woff'),
+        url('../fonts/Parastoo-Bold.ttf') format('truetype');
+    font-weight: bold;
+}
+
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
+
+/* Extra small devices (portrait phones, less than 576px) */
+/* No media query for `xs` since this is the default in Bootstrap */
 body {
-	/* padding: 0 !important; */
-	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-	background-color: #EBEBEB;
+    font-family: 'Parastoo';
+    /* max-width: 320px; */
+    background-color: #ebebeb;
 }
 
-.welcomebackground {
-	/* width: 100%; */
-	position: relative;
+.fullscreen-vh {
+    height: 100vh;
 }
-.fill {
-	overflow: hidden;
-	height: 400px;
-	padding: 0 !important;
+
+.fullscreen-pcnt {
+    height: 100%;
 }
-.fill img {
-	align-content: center;
-	flex-shrink: 0;
-    min-width: 100%;
-    min-height: 100%
+
+.pdd-0 {
+    padding: 0;
 }
-a {
-	color: #00B7FF;
+
+.pdd-t-d-15 {
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
-.welcometext {
-	color: white;
-	position: absolute !important;
-	top: 50px;
-	justify-content: center;
-	left: 0;
+
+.mg-auto {
+    margin: auto;
+}
+
+.align-cont-center {
+    align-content: center;
+}
+
+.main-background {
+    background-image: url(../images/background-welcome.jpg);
+}
+
+.container-max-height {
+    max-height: 568px;
 }
 
 
-/* for mobile */
-.topheading {
-	height: 500px;
+.welcome-container {
+    color: #f8f9fa;
+    background-color: rgba(0, 0, 0, 0.3);
 }
-.topheading-background {
-	background-image: url('/images/background-welcome.jpg');
-	background-repeat: no-repeat;
-}
-.makertl {
-	text-align: right;
-}
-.pd-right-20 {
-	margin-right: 20px !important;
-}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {}

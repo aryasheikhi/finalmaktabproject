@@ -1,13 +1,100 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html>
 
 <head>
     <title>blog</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css" integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous">
     <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 
-<body>
+<body dir="rtl">
+    <div class="container-fluid main-background fullscreen-vh">
+        <div class="row fullscreen-pcnt">
+            <div class="col-12 mg-auto">
+                <div class="row welcome-container">
+                    <div class="col-10 offset-1">
+                        <h2 class="">خوش آمدید</h2>
+                        <p>وبلاگ آریا و فرید</p>
+                    </div>
+                    <div class="col-10 offset-1">
+                        <button data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-light">ورود</button>
+                        <a href="/signup" class="btn btn-outline-light">نام‌نویسی</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div>dd</div>
+            </div>
+        </div>
+    </div>
+    <!-- login modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">ورود</h5>
+                </div>
+                <div class="modal-body">
+                    <div>
+
+
+                        <form action="/login" method="post">
+                            <div class="form-group">
+                                <label for="username">نام کاربری</label>
+                                <input type="text" name="username" id="username" class="form-control" placeholder="نام کاربری">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">رمز عبور</label>
+                                <input type="password" name="password" class="form-control" id="password" placeholder="رمز عبور">
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberme" name="rememberme">
+                                <label class="form-check-label" for="rememberme">مرا به خاطر خاطر بسپار</label>
+                            </div> 
+                            <button type="submit" class="btn btn-primary">ورود</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- <div class="container">
         <div class="row" style="text-align: center;">
             <div class="col-12 fill">
@@ -23,7 +110,7 @@
         </div>
     </div> -->
 
-    <div class="container col-12" style="padding: 0;">
+    <!-- <div class="container col-12" style="padding: 0;">
         <div class="topheading topheading-background">
             <div class="welcometext col-12 makertl pd-right-20">
                 <h1 class="">خوش آمدید</h1>
@@ -35,37 +122,6 @@
         </div>
     </div>
 
-    <!-- login modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">ورود</h5>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <form action="/login" method="post">
-                            <div class="form-group">
-                                <label for="username">نام کاربری</label>
-                                <input type="text" name="username" id="username" class="form-control" placeholder="نام کاربری">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">رمز عبور</label>
-                                <input type="password" class="form-control" id="password" placeholder="رمز عبور">
-                            </div>
-                            <!-- remember me
-                            <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                            </div> -->
-                            <button type="submit" class="btn btn-primary">ورود</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -76,7 +132,5 @@
     <a href="/signup">i'm not a member</a> -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-</body>
-
+    <script src="https://cdn.rtlcss.com/bootstrap/v4.0.0/js/bootstrap.min.js" integrity="sha384-54+cucJ4QbVb99v8dcttx/0JRx4FHMmhOWi4W+xrXpKcsKQodCBwAvu3xxkZAwsH" crossorigin="anonymous"></script></body>
 </html>
