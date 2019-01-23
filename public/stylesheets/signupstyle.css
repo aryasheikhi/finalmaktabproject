@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+}
+.loginbackground {
+    background-image: linear-gradient(45deg, #3CD500, #FFF720);
+}
+.fullscreen-vh {
+    height: 100vh;
+}
+.fullscreen-pcnt {
+    height: 100%;
+}
+.mg-0 {
+    margin: 0;
+}
+.mg-auto {
+    margin: auto;
+}
+.loginbox-mod {
+    background-color: white !important;
+    padding: 10px;
+    border-radius: 5px;
+}
+.textbox {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: rgb(40, 139, 0) solid 2px;
+}
+::placeholder {
+    color: rgb(40, 139, 0);
+    opacity: 1;
+}

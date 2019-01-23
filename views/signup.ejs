@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>sign up</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
-    <!-- <script src="main.js"></script> -->
-</head>
-<body>
-    <p><%= message %></p>
-    <form action="/signup" method="post">
-        <p>first name <input type="text" name="firstName"></p>    
-        <p>last name <input type="text" name="lastName"></p>    
-        <p>user name <input type="text" name="username"></p>    
-        <p>password <input type="password" name="password"></p>    
-        <p>retype password <input type="password" name="password2"></p>    
-        <p>sex <input type="radio" name="sex" value=1>male
-            <input type="radio" name="sex" value=0>female
-            <input type="radio" name="sex" value=2>other
-        </p>
-        <p>profile picture</p>    
-        <p>mobile number <input type="text" name="mobile"></p>
-        <input type="submit" value="sign me up">
-    </form>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>sign up</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+        <!-- <script src="main.js"></script> -->
+        <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css" integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous">
+        <link rel='stylesheet' href='/stylesheets/signupstyle.css' />
+    </head>
+    <body dir="rtl ">
+        <%= message %>
+        <div class="container loginbackground fullscreen-vh col-12">
+        <div class="row fullscreen-pcnt">
+            <div class="mg-auto row" dir="rtl">
+                <div class="col-12 loginbox-mod">
+                    <div class="form-group">
+                        <p>اول به ما بگویید که نام شما چیست</p>
+                        <input type="text" class="textbox" name="firstName" placeholder="نام">
+                        <input type="text" class="textbox" name="lastName" placeholder="نام خانوادگی">
+                        <button>بعدی</button>
+                    </div>
+                    <div class="form-group">
+                        <p>حال، نام کاربری خود را تعیین کنید</p>
+                        <input type="text" class="textbox" name="username" placeholder="نام کاربری">
+                        <button>بعدی</button>
+                    </div>
+                    <div class="form-group">
+                        <p>و حالا رمز عبور</p>
+                        <input type="password" class="textbox" name="password" placeholder="رمز">
+                        <input type="password" class="textbox" name="password2" placeholder="تکرار رمز">
+                        <button>بعدی</button>
+                    </div>
+                    <div class="form-group">
+                        <p>اگر مایل هستید، جنسیتتان را با تعیین کنید</p>
+                        <legend class="col-form-label">جنسیت</legend>
+                        <label for="sex">مرد</label>
+                        <input type="radio" name="sex" value=1>
+                        <label for="sex">زن</label>
+                        <input type="radio" name="sex" value=0>
+                        <label for="sex">غیره</label>
+                        <input type="radio" name="sex" value=2>
+                    </div>
+                    <div class="form-group">
+                    <p>تصویری برای خود درنظر بگیرید</p>
+                        آواتار
+                    </div>
+                    <div class="form-group">
+                        <p>و در آخر، ایمیل خود را وارد کنید</p>
+                        <input type="text" class="textbox" name="mobile" placeholder="تلفن هم‌راه">
+                        <input type="submit" value="ثبت‌نام">
+                    </div>
+                    <div class="form-group">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
