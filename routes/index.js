@@ -5,14 +5,24 @@ var path = require('path');
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 var multer  = require('multer');
-var upload = multer({ dest: path.join(__dirname + '/../public/images') });
-
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname + '/../public/images'))
+  },
+  filename: function (req, file, cb) {
+    User.findById(req.session.passport.user, (err, user) => {
+        cb(null, user.username + path.extname(file.originalname))      
+    });
+  }
+})
+var upload = multer({ storage: storage });
 var userSchema = new mongoose.Schema({
   username: String,
   password: String,
   firstName: String,
   lastname: String,
   sex: Number,
+  avatar: String,
   mobile: Number
 })
 var User = mongoose.model('User', userSchema);
@@ -88,7 +98,7 @@ router.get('/signup', (req, res) => {
   res.render('signup', {message: ""});
 })
 
-router.post('/signup', (req, res) => {
+router.post('/signup', upload.single('img'), (req, res) => {
   let {firstName, lastName, username, password, password2, sex, mobile} = req.body;
   console.log(firstName, lastName, username, password, password2, sex, mobile)
   if(firstName === '' 
@@ -106,24 +116,18 @@ router.post('/signup', (req, res) => {
     if(user){
       res.render('signup', {message: 'username already taken'});
     }else{
-      let newUser = new User({firstName, lastName, username, password, sex, mobile});
-      newUser.save();
+      if(!req.file){
+        let newUser = new User({firstName, lastName, username, password, sex, mobile,
+          avatar: path.join(__dirname + '/../public/images/avatar.jpg')});
+        newUser.save();      
+      }else{
+        let newUser = new User({firstName, lastName, username, password, sex, mobile,
+           avatar: path.join(__dirname + '/../public/images/' + req.file.originalname)});
+        newUser.save();
+      }
       res.render('index', {message: 'registered successfuly'})
     }
   })
-  
-})
-
-// router.post('/image', (req, res) => {
-//   console.log(req.body);
-//   res.sendStatus(200);
-// })
-
-router.post('/image', upload.single('img'), (req, res, next) => {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-  console.log(req.file)
-  res.sendStatus(200);
 })
 
 module.exports = router;
