@@ -16,44 +16,46 @@
         <div class="row fullscreen-pcnt">
             <div class="mg-auto row" dir="rtl">
                 <div class="col-12 loginbox-mod">
-                    <div class="form-group">
-                        <p>اول به ما بگویید که نام شما چیست</p>
-                        <input type="text" class="textbox" name="firstName" placeholder="نام">
-                        <input type="text" class="textbox" name="lastName" placeholder="نام خانوادگی">
-                        <button>بعدی</button>
-                    </div>
-                    <div class="form-group">
-                        <p>حال، نام کاربری خود را تعیین کنید</p>
-                        <input type="text" class="textbox" name="username" placeholder="نام کاربری">
-                        <button>بعدی</button>
-                    </div>
-                    <div class="form-group">
-                        <p>و حالا رمز عبور</p>
-                        <input type="password" class="textbox" name="password" placeholder="رمز">
-                        <input type="password" class="textbox" name="password2" placeholder="تکرار رمز">
-                        <button>بعدی</button>
-                    </div>
-                    <div class="form-group">
-                        <p>اگر مایل هستید، جنسیتتان را با تعیین کنید</p>
-                        <legend class="col-form-label">جنسیت</legend>
-                        <label for="sex">مرد</label>
-                        <input type="radio" name="sex" value=1>
-                        <label for="sex">زن</label>
-                        <input type="radio" name="sex" value=0>
-                        <label for="sex">غیره</label>
-                        <input type="radio" name="sex" value=2>
-                    </div>
-                    <div class="form-group">
-                    <p>تصویری برای خود درنظر بگیرید</p>
-                        آواتار
-                    </div>
-                    <div class="form-group">
-                        <p>و در آخر، ایمیل خود را وارد کنید</p>
-                        <input type="text" class="textbox" name="mobile" placeholder="تلفن هم‌راه">
-                        <input type="submit" value="ثبت‌نام">
-                    </div>
-                    <div class="form-group">
-                    </div>
+                    <form action="/signup" method="POST">
+                        <div class="form-group">
+                            <p>اول به ما بگویید که نام شما چیست</p>
+                            <input type="text" class="textbox" name="firstName" placeholder="نام">
+                            <input type="text" class="textbox" name="lastName" placeholder="نام خانوادگی">
+                            <button>بعدی</button>
+                        </div>
+                        <div class="form-group">
+                            <p>حال، نام کاربری خود را تعیین کنید</p>
+                            <input type="text" class="textbox" name="username" placeholder="نام کاربری">
+                            <button>بعدی</button>
+                        </div>
+                        <div class="form-group">
+                            <p>و حالا رمز عبور</p>
+                            <input type="password" class="textbox" name="password" placeholder="رمز">
+                            <input type="password" class="textbox" name="password2" placeholder="تکرار رمز">
+                            <button>بعدی</button>
+                        </div>
+                        <div class="form-group">
+                            <p>اگر مایل هستید، جنسیتتان را با تعیین کنید</p>
+                            <legend class="col-form-label">جنسیت</legend>
+                            <label for="sex">مرد</label>
+                            <input type="radio" name="sex" value=1>
+                            <label for="sex">زن</label>
+                            <input type="radio" name="sex" value=0>
+                            <label for="sex">غیره</label>
+                            <input type="radio" name="sex" value=2>
+                        </div>
+                        <div class="form-group">
+                        <p>تصویری برای خود درنظر بگیرید</p>
+                            آواتار
+                        </div>
+                        <div class="form-group">
+                            <p>و در آخر، ایمیل خود را وارد کنید</p>
+                            <input type="text" class="textbox" name="mobile" placeholder="تلفن هم‌راه">
+                            <input type="submit" value="ثبت‌نام">
+                        </div>
+                        <div class="form-group">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
