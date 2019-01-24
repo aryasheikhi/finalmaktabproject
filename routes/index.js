@@ -157,4 +157,8 @@ router.get('/logout', isLogedIn, (req, res) => {
   })
 })
 
+router.get('/newarticle', (req, res) => {
+  res.render('articleEditor');
+})
+
 module.exports = router;
