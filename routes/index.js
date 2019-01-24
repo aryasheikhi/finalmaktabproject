@@ -102,7 +102,9 @@ router.get('/', (req, res, next) => {
 
 router.get('/dashboard', isLogedIn, (req, res) => {
   User.findById(req.session.passport.user, (err, user) => {
-    res.render('dashboard', {username: user.username});
+    res.render('dashboard', {user: {
+      username: user.username
+    }});
   })
 })
 
