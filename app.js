@@ -1,17 +1,18 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+var createError  = require('http-errors');
+var express      = require('express');
+var path         = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var logger       = require('morgan');
+var session      = require('express-session');
+var connectMongo = require('connect-mongo');
+const MongoStore = connectMongo(session);
+var passport     = require('passport');
+var mongoose     = require('mongoose');
 
-var passport = require('passport');
-var mongoose = require('mongoose');
-var session = require('express-session');
 
 mongoose.connect('mongodb://localhost/blog', {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -36,6 +37,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   // cookie: { secure: true }
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 
 

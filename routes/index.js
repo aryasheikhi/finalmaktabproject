@@ -38,6 +38,12 @@ var User = mongoose.model('User', userSchema);
 //   })
 // });
 
+var sessionSchema = new mongoose.Schema({
+  "expires" : Date,
+  "session" : String
+})
+var Sessions = mongoose.model('sessions', sessionSchema);
+
 
 passport.use('local-login', new LocalStrategy((username, password, done) => {
   User.findOne({username : username}, function (err, user) {
@@ -60,7 +66,7 @@ passport.deserializeUser((id, done) => {
 
 
 let isLogedIn = (req, res, next) => {
-  if(req.session.passport.user){
+  if(req.session.passport){
     let id = req.session.passport.user;
     User.findById(id, (err, user) => {
       if (user) {
@@ -72,7 +78,15 @@ let isLogedIn = (req, res, next) => {
   }else{
     return res.sendStatus(404);
   }
-  
+}
+
+let setExpireTime = (req, res, next) => {
+  if(req.body.rememberme === 'on'){
+    req.session.cookie.maxAge = 14 * 24 * 3600000; //2 weeks
+  }else{
+    req.session.cookie.maxAge = 15 * 60000;
+  }
+  return next();
 }
 
 
@@ -88,11 +102,11 @@ router.get('/', (req, res, next) => {
 
 router.get('/dashboard', isLogedIn, (req, res) => {
   User.findById(req.session.passport.user, (err, user) => {
-    res.render('dashboard', {username: user.username});
+    res.render('test', {username: user.username});
   })
 })
 
-router.post('/login', passport.authenticate('local-login', { failureRedirect: '/', successRedirect: '/dashboard' }))
+router.post('/login', setExpireTime, passport.authenticate('local-login', { failureRedirect: '/', successRedirect: '/dashboard' }), )
 
 router.get('/signup', (req, res) => {
   res.render('signup', {message: ""});
@@ -100,7 +114,6 @@ router.get('/signup', (req, res) => {
 
 router.post('/signup', upload.single('img'), (req, res) => {
   let {firstName, lastName, username, password, password2, sex, mobile} = req.body;
-  console.log(firstName, lastName, username, password, password2, sex, mobile)
   if(firstName === '' 
   || lastName === '' 
   || username === '' 
@@ -119,14 +132,30 @@ router.post('/signup', upload.single('img'), (req, res) => {
       if(!req.file){
         let newUser = new User({firstName, lastName, username, password, sex, mobile,
           avatar: path.join(__dirname + '/../public/images/avatar.jpg')});
-        newUser.save();      
+        newUser.save();
       }else{
         let newUser = new User({firstName, lastName, username, password, sex, mobile,
            avatar: path.join(__dirname + '/../public/images/' + req.file.originalname)});
         newUser.save();
+        res.render('index', {message: 'registered successfuly'})
       }
-      res.render('index', {message: 'registered successfuly'})
     }
+  })
+})
+
+router.get('/logout', isLogedIn, (req, res) => {
+  let id = req.session.passport.user;
+  Sessions.find({}, (err, result) => {
+    result.map(item => {
+      if(item.session.includes(id)){
+        Sessions.deleteOne({id : item._id}, (error, status) => {
+          console.log(status)
+        });
+      }
+    })
+  }).then(() => {
+    res.clearCookie('connect.sid');
+        res.redirect('/');
   })
 })
 
