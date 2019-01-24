@@ -26,17 +26,6 @@ var userSchema = new mongoose.Schema({
   mobile: Number
 })
 var User = mongoose.model('User', userSchema);
-// db.once('open', function() {
-//   let test = new User({username: 'test', password: 'test',
-//   firstName: 'test',
-//   lastname: 'test',
-//   sex: 0,
-//   mobile: 9123456789});
-//   // test.save();
-//   User.find((err, result) => {
-//     console.log(result)
-//   })
-// });
 
 var sessionSchema = new mongoose.Schema({
   "expires" : Date,
@@ -163,7 +152,7 @@ router.get('/newarticle', (req, res) => {
   res.render('articleEditor');
 })
 
-router.post('/newarticle', (req, res) => {
+router.post('/newarticle', upload.single('articleimage'), (req, res) => {
   console.log(req.body);
   res.redirect('/dashboard');
 })
