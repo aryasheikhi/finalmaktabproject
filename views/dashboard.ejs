@@ -16,21 +16,25 @@
 
 
     <!-- articles -->
-    <div>
+    <!-- <div>
         <% for (let i = 0; i < 10; i++) { %>
             <div class="articleholder"></div>
         <% } %>
-    </div>
+    </div> -->
 
 
     <div id="articlemaker" class="hidden">
-        <input type="file" name="articleimage" accept="image/*">
-        <textarea name="" id="" cols="30" rows="10">DD</textarea>
+        <form action="/articlemake" enctype="multipart/form-data" method="post">
+            <input type="file" name="articleimage" accept="image/*">
+            <textarea name="articletext" id="" cols="30" rows="10"></textarea>
+            <input type="submit" value="افزودن مقاله">
+        </form>
     </div>
 
-    <button class="addarticle">افزودن مقاله</button>
-    <a href="">پروفایل</a>
+    <a href="newarticle" class="addarticle">افزودن مقاله</a>
+    <a href=<%= "/profile/" + username %>>پروفایل</a>
     <a href=""></a>
+    <a href="/logout">خروج</a>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="/scripts/dashboard.js"></script>
