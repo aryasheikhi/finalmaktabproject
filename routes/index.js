@@ -149,6 +149,7 @@ router.get('/logout', isLogedIn, (req, res) => {
     result.map(item => {
       if(item.session.includes(id)){
         Sessions.deleteOne({id : item._id}, (error, status) => {
+          
           console.log(status)
         });
       }
