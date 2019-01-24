@@ -102,7 +102,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/dashboard', isLogedIn, (req, res) => {
   User.findById(req.session.passport.user, (err, user) => {
-    res.render('test', {username: user.username});
+    res.render('dashboard', {username: user.username});
   })
 })
 
@@ -148,10 +148,7 @@ router.get('/logout', isLogedIn, (req, res) => {
   Sessions.find({}, (err, result) => {
     result.map(item => {
       if(item.session.includes(id)){
-        Sessions.deleteOne({id : item._id}, (error, status) => {
-          
-          console.log(status)
-        });
+        Sessions.deleteOne({id : item._id}, () => {});
       }
     })
   }).then(() => {
