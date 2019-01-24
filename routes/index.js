@@ -161,4 +161,11 @@ router.get('/newarticle', (req, res) => {
   res.render('articleEditor');
 })
 
+router.post('/newarticle', (req, res) => {
+  console.log(req.body);
+  res.redirect('/dashboard');
+})
+
+
+
 module.exports = router;
