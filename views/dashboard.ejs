@@ -3,35 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><%= username %>'s dashboard</title>
+    <title><%= user.username %>'s dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/dashboard.css" />
     <!-- <script src="main.js"></script> -->
 </head>
 <body>
-    <!-- <form action="/image" enctype="multipart/form-data" method="post">
-        <input type="file" name="img">
-        <input type="submit" value="submit">
-    </form> -->
-
-
-    <!-- articles -->
-    <!-- <div>
-        <% for (let i = 0; i < 10; i++) { %>
-            <div class="articleholder"></div>
-        <% } %>
-    </div> -->
-
-
-    <div id="articlemaker" class="hidden">
-        <form action="/articlemake" enctype="multipart/form-data" method="post">
-            <input type="file" name="articleimage" accept="image/*">
-            <textarea name="articletext" id="" cols="30" rows="10"></textarea>
-            <input type="submit" value="افزودن مقاله">
-        </form>
-    </div>
-
-    <a href="newarticle" class="addarticle">افزودن مقاله</a>
+    <a href="/newarticle" class="addarticle">افزودن مقاله</a>
     <a href=<%= "/profile/" + username %>>پروفایل</a>
     <a href=""></a>
     <a href="/logout">خروج</a>
