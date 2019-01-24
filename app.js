@@ -42,7 +42,7 @@ app.use(session({
 
 
 app.use('/', indexRouter);
-app.use('/users', profileRouter);
+app.use('/profile', profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
