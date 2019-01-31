@@ -10,10 +10,13 @@ var storage = multer.diskStorage({
     cb(null, path.join(__dirname + '/../public/images'))
   },
   filename: function (req, file, cb) {
+    if(req.article){
+      cb(null, req.body.articlename + req.time.getTime().toString() + path.extname(file.originalname))
+    }else{
     User.findById(req.session.passport.user, (err, user) => {
-        cb(null, user.username + path.extname(file.originalname))      
+      cb(null, user.username + path.extname(file.originalname))      
     });
-  }
+  }}
 })
 var upload = multer({ storage: storage });
 var userSchema = new mongoose.Schema({
@@ -26,6 +29,14 @@ var userSchema = new mongoose.Schema({
   mobile: Number
 })
 var User = mongoose.model('User', userSchema);
+
+var articleSchema = new mongoose.Schema({
+  name: String,
+  text: String,
+  image: String,
+  date: Date
+})
+var Article = mongoose.model('Article', articleSchema);
 
 var sessionSchema = new mongoose.Schema({
   "expires" : Date,
@@ -61,11 +72,11 @@ let isLogedIn = (req, res, next) => {
       if (user) {
         return next();
       } else {
-        return res.sendStatus(404);
+        return res.redirect('/');
       }
     });
   }else{
-    return res.sendStatus(404);
+    return res.redirect('/');
   }
 }
 
@@ -78,9 +89,12 @@ let setExpireTime = (req, res, next) => {
   return next();
 }
 
+let thisIsAnArticle = (req, res, next) => {
+  req.article = true;
+  req.time = new Date();
+  next();
+}
 
-
-/* GET home page. */
 router.get('/', (req, res, next) => {
   if(!req.session.passport){
     res.render('index', { message: '' });
@@ -152,8 +166,12 @@ router.get('/newarticle', (req, res) => {
   res.render('articleEditor');
 })
 
-router.post('/newarticle', upload.single('articleimage'), (req, res) => {
-  console.log(req.body);
+router.post('/newarticle', thisIsAnArticle, upload.single('articleimage'), (req, res) => {
+  let posted = new Article({text: req.body.articletext, 
+                            image: req.body.articlename + req.time.getTime().toString() + path.extname(file.originalname),
+                            date: req.date,
+                            name: req.body.articlename});
+  posted.save();
   res.redirect('/dashboard');
 })
 
