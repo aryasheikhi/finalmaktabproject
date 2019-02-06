@@ -10,11 +10,11 @@ var storage = multer.diskStorage({
     cb(null, path.join(__dirname + '/../public/images'))
   },
   filename: function (req, file, cb) {
-    if(req.article){
-      cb(null, req.body.articlename + req.time.getTime().toString() + path.extname(file.originalname))
+    if(req.pictureFor === "article"){
+      cb(null, req.time.getTime().toString() + path.extname(file.originalname))
     }else{
     User.findById(req.session.passport.user, (err, user) => {
-      cb(null, user.username + path.extname(file.originalname))      
+      cb(null, user.username + req.time.getTime().toString() + path.extname(file.originalname))      
     });
   }}
 })
@@ -31,6 +31,7 @@ var userSchema = new mongoose.Schema({
 var User = mongoose.model('User', userSchema);
 
 var articleSchema = new mongoose.Schema({
+  author: String,
   name: String,
   text: String,
   image: String,
@@ -81,18 +82,28 @@ let isLogedIn = (req, res, next) => {
 }
 
 let setExpireTime = (req, res, next) => {
-  if(req.body.rememberme === 'on'){
-    req.session.cookie.maxAge = 14 * 24 * 3600000; //2 weeks
-  }else{
-    req.session.cookie.maxAge = 15 * 60000;
+  switch (req.body.rememberme) {
+    case 'on':
+      req.session.cookie.maxAge = 1209600000; //2 weeks
+      break;
+  
+    default:
+      req.session.cookie.maxAge = 900000; //15 minutes
+      break;
   }
   return next();
 }
 
 let thisIsAnArticle = (req, res, next) => {
-  req.article = true;
+  req.pictureFor = "article";
   req.time = new Date();
-  next();
+  return next();
+}
+
+let thisIsAUser = (req, res, next) => {
+  req.pictureFor = "user";
+  req.time = new Date();
+  return next();
 }
 
 router.get('/', (req, res, next) => {
@@ -111,13 +122,24 @@ router.get('/dashboard', isLogedIn, (req, res) => {
   })
 })
 
-router.post('/login', setExpireTime, passport.authenticate('local-login', { failureRedirect: '/', successRedirect: '/dashboard' }), )
+// router.post('/login', setExpireTime, passport.authenticate('local-login', { failureRedirect: '/', successRedirect: '/dashboard' }), )
+
+router.post('/login', setExpireTime, function(req, res, next) {
+  passport.authenticate('local-login', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { return res.status(800).render('index', {message: "incorrect username or password"}); }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.status(200).redirect('/dashboard');
+    });
+  })(req, res, next);
+});
 
 router.get('/signup', (req, res) => {
   res.render('signup', {message: ""});
 })
 
-router.post('/signup', upload.single('img'), (req, res) => {
+router.post('/signup', thisIsAUser, upload.single('img'), (req, res) => {
   let {firstName, lastName, username, password, password2, sex, mobile} = req.body;
   if(firstName === '' 
   || lastName === '' 
@@ -126,26 +148,41 @@ router.post('/signup', upload.single('img'), (req, res) => {
   || password2 === '' 
   || sex === undefined 
   || mobile === ''){
+    res.status(801);
     res.render('signup', {message: 'fill all boxes'});
-  }
-  if(password !== password2){res.render('signup', {message: "passwords dosen't match"})}
-  if(password.length <= 5){res.render('signup', {message: 'your password must be longer than 5 characters'})}
-  User.findOne({username: username}, (err, user) => {
-    if(user){
-      res.render('signup', {message: 'username already taken'});
-    }else{
-      if(!req.file){
-        let newUser = new User({firstName, lastName, username, password, sex, mobile,
-          avatar: path.join(__dirname + '/../public/images/avatar.jpg')});
-        newUser.save();
+  } else if(password !== password2){
+    res.status(802);
+    res.render('signup', {message: "passwords dosen't match"})
+  } else if(password.length <= 5){
+    res.status(803);
+    res.render('signup', {message: 'your password must be longer than 5 characters'})
+  } else {
+    User.findOne({username: username}, (err, user) => {
+      if(user){
+        res.status(804);
+        res.render('signup', {message: 'username already taken'});
       }else{
-        let newUser = new User({firstName, lastName, username, password, sex, mobile,
-           avatar: path.join(__dirname + '/../public/images/' + req.file.originalname)});
-        newUser.save();
-        res.render('index', {message: 'registered successfuly'})
+        if(!req.file){
+          let newUser = new User({firstName, lastName, username, password, sex, mobile,
+            avatar: path.join(__dirname + '/../public/images/avatar.jpg')});
+          newUser.save();
+          res.status(201);
+          res.render('index', {message: 'registered successfuly'})
+        }else{
+          let newUser = new User({firstName, lastName, username, password, sex, mobile,
+            avatar: path.join(__dirname + '/../public/images/' 
+                                        + user.username 
+                                        + req.time.getTime().toString() 
+                                        + path.extname(req.file.originalname)
+            )
+          });
+          newUser.save();
+          res.status(201);
+          res.render('index', {message: 'registered successfuly'})
+        }
       }
-    }
-  })
+    })
+  }
 })
 
 router.get('/logout', isLogedIn, (req, res) => {
@@ -162,19 +199,49 @@ router.get('/logout', isLogedIn, (req, res) => {
   })
 })
 
-router.get('/newarticle', (req, res) => {
+router.get('/newarticle', isLogedIn, (req, res) => {
   res.render('articleEditor');
 })
 
-router.post('/newarticle', thisIsAnArticle, upload.single('articleimage'), (req, res) => {
-  let posted = new Article({text: req.body.articletext, 
-                            image: req.body.articlename + req.time.getTime().toString() + path.extname(file.originalname),
-                            date: req.date,
-                            name: req.body.articlename});
-  posted.save();
-  res.redirect('/dashboard');
+router.post('/newarticle', isLogedIn, thisIsAnArticle, upload.single('articleimage'), (req, res) => {
+  if(req.body.articlename === ""){
+    res.locals.message = "article must have a name";
+    res.status(801).render('articleEditor');
+  }else if(req.body.articletext.length < 280){
+    res.locals.message = "an article is longer than a tweet";
+    res.status(805).render('articleEditor');
+  }else{
+    User.findById(req.session.passport.user, (err, user) => {
+      let posted = new Article({author: user.username,
+                                text: req.body.articletext, 
+                                image: req.time.getTime().toString() + path.extname(req.file.originalname),
+                                date: req.time,
+                                name: req.body.articlename});
+      posted.save();
+      res.status(201).redirect('/dashboard');
+    })
+  }
 })
 
+router.post('/articles', (req, res) => {
+  Article.find({}, null, {sort: {date: -1}}, function(err, docs) {
+    res.status(200).json({
+      articles: docs.slice(req.body.from, req.body.from + req.body.quantity)
+    })
+  });
+})
+
+router.post('/userArticles', (req, res) => {
+  Article.find({author: req.body.username}, null, {sort: {date: -1}}, function(err, articles) {
+    res.status(200).json({articles: articles})
+  });
+})
+
+router.post('/theArticle', (req, res) => {
+  Article.findById(req.body.id, function(err, article) {
+    res.status(200).json({article: article})
+  });
+})
 
 
 module.exports = router;
