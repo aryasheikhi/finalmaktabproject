@@ -4,7 +4,8 @@ weblog project by arya and farid.
 
 status codes:
 
-201 - created successfully
+201 - created
+202 - edited
 800 - invalid username or password
 801 - some required fields are not entered
 802 - fields "password" and "confirm password" are not matching

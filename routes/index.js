@@ -122,8 +122,6 @@ router.get('/dashboard', isLogedIn, (req, res) => {
   })
 })
 
-// router.post('/login', setExpireTime, passport.authenticate('local-login', { failureRedirect: '/', successRedirect: '/dashboard' }), )
-
 router.post('/login', setExpireTime, function(req, res, next) {
   passport.authenticate('local-login', function(err, user, info) {
     if (err) { return next(err); }
@@ -195,7 +193,7 @@ router.get('/logout', isLogedIn, (req, res) => {
     })
   }).then(() => {
     res.clearCookie('connect.sid');
-        res.redirect('/');
+    res.redirect('/');
   })
 })
 
@@ -239,9 +237,34 @@ router.post('/userArticles', (req, res) => {
 
 router.post('/theArticle', (req, res) => {
   Article.findById(req.body.id, function(err, article) {
-    res.status(200).json({article: article})
+    res.status(200).json({article: article});
   });
 })
 
+router.post('/userEverything', (req, res) => {
+  User.findOne({username: req.body.username}, (err, user) =>{
+    Article.find({username: req.body.username}, (error, articles) => {
+      res.status(200).json({
+        articles: articles,
+        info: user
+      });
+    })
+  })
+})
+
+router.post("/editInfo", (req, res) => {
+  let {username, password, firstName, lastName, sex, mobile} = req.body;
+  User.findOne({username}, (err, user) => {
+    if(!user){
+      User.findByIdAndUpdate(req.session.passport.user, {$set: {username, password, firstName, lastName, sex, mobile}}, (err, user) => {
+        Article.update({author: user.username}, {$set: {author: username}}, () => {
+          res.status(202).end();
+        })
+      })
+    }else{
+      res.status(804).end();
+    }
+  })
+})
 
 module.exports = router;

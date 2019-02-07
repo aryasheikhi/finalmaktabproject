@@ -32,18 +32,38 @@ var server = supertest.agent("http://localhost:3000");
 function loginUser() {
     return function(done) {
         server
-            .post('/login')
-            .send({ username: 'FaridA', password: '1234567' })
-            .expect(302)
-            .end(onResponse);
-
+        .post('/login')
+        .send({ username: 'FaridA', password: '1234567' })
+        .expect(302)
+        .end(onResponse);
+        
         function onResponse(err, res) {
-           if (err) return done(err);
-           return done();
+            if (err) return done(err);
+            return done();
         }
     };
 };
+
+function logoutUser(){
+    return function(done) {
+        server
+        .get('/logout')
+        .expect(302)
+        .end(onResponse);
+        
+        function onResponse(err, res) {
+            if (err) return done(err);
+            return done();
+        }
+    };
+}
 // UNIT test begin
+
+before(function(done){
+    User.deleteOne({username: 'FariddA'}, function(err){
+        Article.deleteMany({author: "FariddA"}, done);
+    });
+})
 
 describe('', function(){
     describe("Signup", function(){
@@ -183,8 +203,49 @@ describe('', function(){
     })
 
     describe("Articles", function(){
-        before(loginUser())
+        before(loginUser());
 
+        after(logoutUser());
+
+        describe("Creating a new article", function(){
+            describe("POST /NewArticle Should not accept an article when it", function(){
+                it("has no name", function(done){
+                    server
+                    .post("/newArticle")
+                    .field("articlename", "")
+                    .field("articletext", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.")
+                    .attach("articleimage", "C:\\Users\\ASUS\\Documents\\background\\1196820-4k-psychedelic-wallpapers-1920x1080-full-hd.jpg")
+                    .expect(801)
+                    .end(done);
+                });
+                it("is shorter than 280 characters", function(done){
+                    server
+                    .post("/newArticle")
+                    .field("articletext", "hi")
+                    .field("articlename", "11")
+                    .attach("articleimage", "C:\\Users\\ASUS\\Documents\\background\\1196820-4k-psychedelic-wallpapers-1920x1080-full-hd.jpg")
+                    .expect(805)
+                    .end(done);
+                })
+            })
+            it("Should save an acceptable article to database", async function(){
+                await server
+                .post("/newArticle")
+                .field("articletext", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.")
+                .field("articlename", "11")
+                .attach("articleimage", "C:\\Users\\ASUS\\Documents\\background\\1196820-4k-psychedelic-wallpapers-1920x1080-full-hd.jpg")
+                .expect(302);
+
+                Article.findOne({
+                    name: "11",
+                    text: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.",
+                    author: "FaridA"
+                }, function(err, article){
+                    (!article).should.be.false();
+                })
+            })
+        })
+        
         describe("Finding older articles", function(){
             it("POST /Articles Should return n articles after article number m", function(done){
                 server
@@ -244,41 +305,72 @@ describe('', function(){
                 })
             })
         })
-        
-        describe("Creating a new article", function(){
-            describe("POST /NewArticle Should not accept an article when it", function(){
-                it("has no name", function(done){
-                    server
-                    .post("/newArticle")
-                    .field("articlename", "")
-                    .field("articletext", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.")
-                    .attach("articleimage", "C:\\Users\\ASUS\\Documents\\finalmaktabproject\\public\\images\\1549375518064.jpg")
-                    .expect(801)
-                    .end(done);
-                });
-                it("is shorter than 280 characters", function(done){
-                    server
-                    .post("/newArticle")
-                    .field("articletext", "hi")
-                    .field("articlename", "11")
-                    .attach("articleimage", "C:\\Users\\ASUS\\Documents\\finalmaktabproject\\public\\images\\1549375518064.jpg")
-                    .expect(805)
-                    .end(done);
+    })
+
+    describe("Profile", function(){
+        it("POST /userEverything Should give user's information", function(done){
+            server
+            .post("/userEverything")
+            .send({username: "FaridA"})
+            .expect(200)
+            .end(function(err, res){
+                ("articles" in res.body).should.be.true();
+                ("info" in res.body).should.be.true();
+                res.body.info.should.be.an.Object();
+                done();
+            });
+        });
+
+        describe("Should edit user's information", function(){
+            before(loginUser());
+            it("Should not accept an unavailable username", function(done){
+                server
+                .post("/editInfo")
+                .send({
+                    firstName: "Faridd",
+                    lastName: "Atharyy",
+                    sex: 2,
+                    username: "test",
+                    password: "7654321",
+                    mobile: 98765432190
                 })
-            })
-            xit("Should save an acceptable article to database", function(done){
+                .expect(804)
+                .end(done);
+            });
 
-            })
-        })
-    })
+            it("should accept reasonable changes", function(done){
+                server
+                .post("/editInfo")
+                .send({
+                    firstName: "Faridd",
+                    lastName: "Atharyy",
+                    sex: 2,
+                    username: "FariddA",
+                    password: "7654321",
+                    mobile: 98765432190
+                })
+                .expect(202)
+                .end(done);
+            });
 
-    xdescribe("Profile", function(){
-        it("Should give user's information");
-        it("Should edit user's information");
-    })
+            it("should change all old usernames in articles", async function(){
+                await server
+                .post("/UserArticles")
+                .send({author: "FaridA"})
+                .expect(200)
+                .expect(function(res){
+                    res.body.articles.should.be.empty();
+                });
 
-    after(function(done){
-        User.deleteOne({username: 'FaridA'}, done);
+                server
+                .post("/UserArticles")
+                .send({author: "FariddA"})
+                .expect(200)
+                .end(function(err, res){
+                    res.body.articles.should.not.be.empty();
+                });
+            });
+        });
     })
 })
 
