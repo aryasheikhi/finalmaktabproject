@@ -64,11 +64,13 @@ body {
 }
 
 .login-card {
+    border: 5px solid transparent;
     border-radius: 15px;
 }
 .button {
     border-radius: 15px;
     border: none;
+    color: white;
     background-color: #5961F9;
     transition: background-color 0.2s;
 }
