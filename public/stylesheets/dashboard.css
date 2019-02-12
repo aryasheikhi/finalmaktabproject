@@ -1,3 +1,44 @@
+@font-face {
+    font-family: 'Parastoo';
+    src: url('../fonts/Parastoo.eot');
+    src: url('../fonts/Parastoo.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Parastoo.woff') format('woff'),
+        url('../fonts/Parastoo.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Parastoo-bold';
+    src: url('../fonts/Parastoo-Bold.eot');
+    src: url('../fonts/Parastoo-Bold.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Parastoo-Bold.woff') format('woff'),
+        url('../fonts/Parastoo-Bold.ttf') format('truetype');
+    font-weight: bold;
+}
+body {
+    font-family: 'Parastoo';
+}
 .hidden {
     display: none;
+}
+.background-color {
+    background-image: linear-gradient(90deg, #EE9AE5, #5961F9);
+}
+.sticky-right {
+    position: sticky;
+    top: 0;
+}
+.sidenav {
+    height: 100%;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    padding: 48px 0 0;
+}
+.sidebar-position {
+    padding-right: 120px !important;
+    padding-left: 0;
 }
