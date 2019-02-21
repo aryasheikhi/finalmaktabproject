@@ -66,6 +66,13 @@ body {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
+.margin-for-profile-holder {
+    margin-right: 33.33%;
+}
+
+.profile-height {
+    height: 80%;
+}
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {}
 

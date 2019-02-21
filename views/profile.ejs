@@ -6,12 +6,12 @@
     <title><%= user.username %>'s Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/style.css" />
     <script src="main.js"></script>
 </head>
 <body dir="rtl">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">وبلاگ</a>
+        <a class="navbar-brand" href="/">وبلاگ</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,7 +29,21 @@
             </ul>
         </div>
     </nav>
-    <div class="profile">
+    <div class="profile fullscreen-vh">
+        <div class="row fullscreen-pcnt">
+            <div class="col-12 fullscreen-pcnt">
+                <div class="col-4 margin-for-profile-holder profile-height" style="background-color: red;">
+                    <!-- <img src="< user.avatar >" alt=""> -->
+                    <div contenteditable="false"><%= user.username %></div>
+                    <div contenteditable="false"><%= user.fname %></div>
+                    <div contenteditable="false"><%= user.lname %></div>
+                    <div contenteditable="false"><%= user.number %></div>
+                    <% if (editable) { %>
+                        <input type="button" value="edit">
+                    <% } %>
+                </div>
+            </div>
+        </div>
         
     </div>
     <div class="container">

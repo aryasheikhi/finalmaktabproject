@@ -20,13 +20,13 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage: storage });
 var userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  firstName: String,
-  lastName: String,
-  sex: Number,
-  avatar: String,
-  mobile: Number
+  username: {type: String, required: true, unique: true},
+  password: {type: String, required: true},
+  firstName: {type: String, required: true},
+  lastName: {type: String, required: true},
+  sex: {type: String, required: true},
+  avatar: {type: String, required: false},
+  mobile: {type: String, required: true},
 })
 var User = mongoose.model('User', userSchema);
 
@@ -139,13 +139,7 @@ router.get('/signup', (req, res) => {
 
 router.post('/signup', thisIsAUser, upload.single('img'), (req, res) => {
   let {firstName, lastName, username, password, password2, sex, mobile} = req.body;
-  if(firstName === '' 
-  || lastName === '' 
-  || username === '' 
-  || password === '' 
-  || password2 === '' 
-  || sex === undefined 
-  || mobile === ''){
+  if(!firstName || !lastName || !username || !password || !password2 || !sex || !mobile){
     res.status(801);
     res.render('signup', {message: 'fill all boxes'});
   } else if(password !== password2){
@@ -202,13 +196,16 @@ router.get('/newarticle', isLogedIn, (req, res) => {
 })
 
 router.post('/newarticle', isLogedIn, thisIsAnArticle, upload.single('articleimage'), (req, res) => {
-  console.log(req.body.articlename);
+  console.log(req.file);
   
   if(req.body.articlename === ""){
     res.locals.message = "article must have a name";
     res.status(801).render('articleEditor');
   }else if(req.body.articletext.length < 10){
     res.locals.message = "an article is longer than a tweet";
+    res.status(805).render('articleEditor');
+  }else if(!req.file){
+    res.locals.message = "an article must have a picture";
     res.status(805).render('articleEditor');
   }else{
     User.findById(req.session.passport.user, (err, user) => {
@@ -227,13 +224,13 @@ router.post('/newarticle', isLogedIn, thisIsAnArticle, upload.single('articleima
 router.post('/articles', (req, res) => {
   Article.find({}, null, {sort: {date: -1}}, function(err, docs) {
     res.status(200).json({
-      articles: docs.slice(req.body.from, req.body.from + req.body.quantity)
+      articles: docs.slice(req.body.from * 10, req.body.from * 10 + 10)
     })
   });
 })
 
 router.post('/userArticles', (req, res) => {
-  Article.find({author: req.body.username}, null, {sort: {date: -1}}, function(err, articles) {
+  Article.find({author: req.body.author}, null, {sort: {date: -1}}, function(err, articles) {
     res.status(200).json({articles: articles})
   });
 })

@@ -13,15 +13,24 @@ var mongoose = require('mongoose');
 // })
 var User = mongoose.model('User');
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
+  let editable = false;
+  await User.findById(req.session.passport.user, (err, user) => {
+    if(req.query.user === user.username){
+      editable = true;
+    }
+  })
   User.findOne({username: req.query.user}, (err, user) => {
-    res.render('profile', {user: {
-      username: user.username,
-      fname: user.firstName,
-      lname: user.lastName,
-      avatar: user.avatar,
-      number: user.number
-    }})
+    res.render('profile', {
+      user: {
+        username: user.username,
+        fname: user.firstName,
+        lname: user.lastName,
+        avatar: user.avatar,
+        number: user.number
+      },
+      editable
+    })
   })
 });
 
