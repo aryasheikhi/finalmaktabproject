@@ -13,7 +13,7 @@ var storage = multer.diskStorage({
     if(req.pictureFor === "article"){
       cb(null, req.time.getTime().toString() + path.extname(file.originalname))
     }else{
-    User.findById(req.session.passport.user, (err, user) => {
+    User.findById(req.session.user, (err, user) => {
       cb(null, user.username + req.time.getTime().toString() + path.extname(file.originalname))      
     });
   }}
@@ -168,11 +168,11 @@ router.post('/signup', thisIsAUser, upload.single('img'), (req, res) => {
           res.render('index', {message: 'registered successfuly'})
         }else{
           let newUser = new User({firstName, lastName, username, password, sex, mobile,
-            avatar: path.join(__dirname + '/../public/images/' 
-                                        + user.username 
-                                        + req.time.getTime().toString() 
-                                        + path.extname(req.file.originalname)
-            )
+            // avatar: path.join(__dirname + '/../public/images/' 
+            //                             + user.username 
+            //                             + req.time.getTime().toString() 
+            //                             + path.extname(req.file.originalname)
+            // )
           });
           newUser.save();
           res.status(201);
@@ -202,10 +202,12 @@ router.get('/newarticle', isLogedIn, (req, res) => {
 })
 
 router.post('/newarticle', isLogedIn, thisIsAnArticle, upload.single('articleimage'), (req, res) => {
+  console.log(req.body.articlename);
+  
   if(req.body.articlename === ""){
     res.locals.message = "article must have a name";
     res.status(801).render('articleEditor');
-  }else if(req.body.articletext.length < 280){
+  }else if(req.body.articletext.length < 10){
     res.locals.message = "an article is longer than a tweet";
     res.status(805).render('articleEditor');
   }else{
@@ -214,7 +216,8 @@ router.post('/newarticle', isLogedIn, thisIsAnArticle, upload.single('articleima
                                 text: req.body.articletext, 
                                 image: req.time.getTime().toString() + path.extname(req.file.originalname),
                                 date: req.time,
-                                name: req.body.articlename});
+                                name: req.body.articlename
+                              });
       posted.save();
       res.status(201).redirect('/dashboard');
     })

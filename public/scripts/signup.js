@@ -19,9 +19,11 @@ $(document).ready(function() {
                 $('#error').html('رمز عبور باید بیش‌تر از ۵ کاراکتر باشد');
             } else if ( $('#phone').val() === '') {
                 $('#error').html('لطفا فیلدها را پر کنید');
-            } else if ($('input[type=file]').val() === '') {
-                $('#error').html('لطفا تصویر خود را انتخاب کنید');
-            } else {
+            } 
+            // else if ($('input[type=file]').val() === '') {
+                // $('#error').html('لطفا تصویر خود را انتخاب کنید');
+            // } 
+            else {
                 let allowSubmit = false
                 $('input[type=radio]').each(function() {
                     if (this.checked === true) {
@@ -31,6 +33,9 @@ $(document).ready(function() {
                 if (allowSubmit === false) {
                     $('#error').html('لطفا جنسیت را تعیین کنید');
                 } else {
+                    let formData = new FormData();
+                    // console.log(formData);
+                    
                     $('#signupform').submit();
                 }
             }
