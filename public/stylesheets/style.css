@@ -31,9 +31,16 @@ body {
 .fullscreen-vh {
     height: 100vh;
 }
+.fullscreen-vh-2 {
+    height: 80vh;
+}
 
 .fullscreen-pcnt {
     height: 100%;
+}
+
+.input-size {
+    height: 30px;
 }
 
 .pdd-0 {
@@ -52,7 +59,9 @@ body {
 .align-cont-center {
     align-content: center;
 }
-
+.background {
+    background-image: linear-gradient(45deg, #EE9AE5, #5961F9);
+}
 .main-background {
     background-image: url(../images/background-welcome.jpg);
 }
@@ -67,7 +76,7 @@ body {
 }
 
 .margin-for-profile-holder {
-    margin-right: 33.33%;
+    margin-right: 16.66%;
 }
 
 .profile-height {

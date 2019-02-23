@@ -222,12 +222,12 @@ router.post('/newarticle', isLogedIn, thisIsAnArticle, upload.single('articleima
 })
 
 router.post('/articles', (req, res) => {
-  Article.find({}, null, {sort: {date: -1}}, function(err, docs) {
-    res.status(200).json({
-      articles: docs.slice(req.body.from * 10, req.body.from * 10 + 10)
-    })
-  });
-})
+    Article.find({}, null, { sort: { date: -1 } }, function(err, docs) {
+        res.status(200).json({
+            articles: docs.slice(req.body.from * 10, req.body.from * 10 + 10)
+        });
+    });
+});
 
 router.post('/userArticles', (req, res) => {
   Article.find({author: req.body.author}, null, {sort: {date: -1}}, function(err, articles) {
@@ -253,10 +253,10 @@ router.post('/userEverything', (req, res) => {
 })
 
 router.post("/editInfo", (req, res) => {
-  let {username, password, firstName, lastName, sex, mobile} = req.body;
+  let {username, password, firstName, lastName, mobile} = req.body;
   User.findOne({username}, (err, user) => {
     if(!user){
-      User.findByIdAndUpdate(req.session.passport.user, {$set: {username, password, firstName, lastName, sex, mobile}}, (err, user) => {
+      User.findByIdAndUpdate(req.session.passport.user, {$set: {username, password, firstName, lastName, mobile}}, (err, user) => {
         Article.update({author: user.username}, {$set: {author: username}}, () => {
           res.status(202).end();
         })
